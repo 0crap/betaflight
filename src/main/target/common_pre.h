@@ -148,13 +148,13 @@
 #define USE_TASK_STATISTICS
 #define USE_GYRO_REGISTER_DUMP  // Adds gyroregisters command to cli to dump configured register values
 #define USE_IMU_CALC
-#define USE_PPM
+//#define USE_PPM
 #define USE_SERIAL_RX
-#define USE_SERIALRX_CRSF       // Team Black Sheep Crossfire protocol
-#define USE_SERIALRX_IBUS       // FlySky and Turnigy receivers
+//#define USE_SERIALRX_CRSF       // Team Black Sheep Crossfire protocol
+//#define USE_SERIALRX_IBUS       // FlySky and Turnigy receivers
 #define USE_SERIALRX_SBUS       // Frsky and Futaba receivers
-#define USE_SERIALRX_SPEKTRUM   // SRXL, DSM2 and DSMX protocol
-#define USE_SERIALRX_SUMD       // Graupner Hott protocol
+//#define USE_SERIALRX_SPEKTRUM   // SRXL, DSM2 and DSMX protocol
+//#define USE_SERIALRX_SUMD       // Graupner Hott protocol
 
 #if (FLASH_SIZE > 128)
 #define PID_PROFILE_COUNT 3
@@ -165,11 +165,25 @@
 #endif
 
 #if (FLASH_SIZE > 64)
-#define USE_ACRO_TRAINER
-#define USE_BLACKBOX
+#define USE_LED_STRIP
+#define USE_LED_STRIP_STATUS_MODE
+#define USE_SMART_FEEDFORWARD
+#define USE_BOARD_INFO
+#define USE_CMS
+#define USE_EXTENDED_CMS_MENUS
+#define USE_ITERM_RELAX
+#define USE_RC_SMOOTHING_FILTER
+#define USE_TPA_MODE
+#define USE_THROTTLE_BOOST
+#define USE_DYN_LPF
+#define USE_D_MIN
+#define USE_ABSOLUTE_CONTROL
+#define USE_INTEGRATED_YAW_CONTROL
+//#define USE_ACRO_TRAINER
+//#define USE_BLACKBOX
 #define USE_RESOURCE_MGMT
 #define USE_RUNAWAY_TAKEOFF     // Runaway Takeoff Prevention (anti-taz)
-#define USE_SERVOS
+//#define USE_SERVOS
 #define USE_TELEMETRY
 #define USE_TELEMETRY_FRSKY_HUB
 #define USE_TELEMETRY_SMARTPORT
@@ -304,4 +318,3 @@
 // Re-enable this after 4.0 has been released, and remove the define from STM32F4DISCOVERY
 //#define USE_VTX_TABLE
 #endif
-
