@@ -160,22 +160,9 @@
 #endif
 
 #if (FLASH_SIZE > 64)
-#define USE_LED_STRIP
-#define USE_LED_STRIP_STATUS_MODE
-#define USE_SMART_FEEDFORWARD
-#define USE_BOARD_INFO
-#define USE_CMS
-#define USE_EXTENDED_CMS_MENUS
-#define USE_ITERM_RELAX
-#define USE_RC_SMOOTHING_FILTER
-#define USE_TPA_MODE
-#define USE_THROTTLE_BOOST
-#define USE_DYN_LPF
-#define USE_D_MIN
-#define USE_ABSOLUTE_CONTROL
-#define USE_INTEGRATED_YAW_CONTROL
-//#define USE_ACRO_TRAINER
-//#define USE_BLACKBOX
+#define USE_ACRO_TRAINER
+#define USE_BLACKBOX
+#define USE_CLI_BATCH
 #define USE_RESOURCE_MGMT
 #define USE_RUNAWAY_TAKEOFF     // Runaway Takeoff Prevention (anti-taz)
 //#define USE_SERVOS
