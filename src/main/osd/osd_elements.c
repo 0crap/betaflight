@@ -33,8 +33,10 @@
     Create the function to "draw" the element. It should be named like "osdElementSomething()"
     where the "Something" describes the element.
 
-    Finally add the mapping from the element ID added in the first step to the function
+    Add the mapping from the element ID added in the first step to the function
     created in the third step to the osdElementDrawFunction array.
+
+    Finally add a CLI parameter for the new element in cli/settings.c.
 */
 
 #include <stdbool.h>
@@ -64,6 +66,7 @@
 
 #include "drivers/display.h"
 #include "drivers/max7456_symbols.h"
+#include "drivers/pwm_output.h"
 #include "drivers/time.h"
 #include "drivers/vtx_common.h"
 
@@ -157,21 +160,22 @@ static uint32_t blinkBits[(OSD_ITEM_COUNT + 31) / 32];
 #define IS_BLINK(item) (blinkBits[(item) / 32] & (1 << ((item) % 32)))
 #define BLINK(item) (IS_BLINK(item) && blinkState)
 
-#if defined(USE_ESC_SENSOR) || defined(USE_RPM_FILTER)
+#if defined(USE_ESC_SENSOR) || defined(USE_DSHOT_TELEMETRY)
 typedef int (*getEscRpmOrFreqFnPtr)(int i);
 
 static int getEscRpm(int i)
 {
-#ifdef USE_RPM_FILTER
+#ifdef USE_DSHOT_TELEMETRY
     if (motorConfig()->dev.useDshotTelemetry) {
         return 100.0f / (motorConfig()->motorPoleCount / 2.0f) * getDshotTelemetry(i);
     }
 #endif 
+#ifdef USE_ESC_SENSOR
     if (featureIsEnabled(FEATURE_ESC_SENSOR)) {
         return calcEscRpm(getEscSensorData(i)->rpm);
-    } else { 
-        return 0;
     }
+#endif
+    return 0;
 }
 
 static int getEscRpmFreq(int i) 
@@ -648,7 +652,7 @@ static void osdElementEscTemperature(osdElementParms_t *element)
 }
 #endif // USE_ESC_SENSOR
 
-#if defined(USE_ESC_SENSOR) || defined(USE_RPM_FILTER)
+#if defined(USE_ESC_SENSOR) || defined(USE_DSHOT_TELEMETRY)
 static void osdElementEscRpm(osdElementParms_t *element)
 {
     renderOsdEscRpmOrFreq(&getEscRpm,element);
@@ -1362,7 +1366,7 @@ const osdElementDrawFn osdElementDrawFunction[OSD_ITEM_COUNT] = {
 #ifdef USE_ESC_SENSOR
     [OSD_ESC_TMP]                 = osdElementEscTemperature,
 #endif
-#if defined(USE_RPM_FILTER) || defined(USE_ESC_SENSOR)
+#if defined(USE_DSHOT_TELEMETRY) || defined(USE_ESC_SENSOR)
     [OSD_ESC_RPM]                 = osdElementEscRpm,
 #endif
     [OSD_REMAINING_TIME_ESTIMATE] = osdElementRemainingTimeEstimate,
@@ -1397,7 +1401,7 @@ const osdElementDrawFn osdElementDrawFunction[OSD_ITEM_COUNT] = {
     [OSD_STICK_OVERLAY_RIGHT]     = osdElementStickOverlay,
 #endif
     [OSD_DISPLAY_NAME]            = osdElementDisplayName,
-#if defined(USE_RPM_FILTER) || defined(USE_ESC_SENSOR)
+#if defined(USE_DSHOT_TELEMETRY) || defined(USE_ESC_SENSOR)
     [OSD_ESC_RPM_FREQ]            = osdElementEscRpmFreq,
 #endif
 };
@@ -1444,7 +1448,7 @@ void osdAnalyzeActiveElements(void)
     }
 #endif
 
-#if defined(USE_RPM_FILTER) || defined(USE_ESC_SENSOR)
+#if defined(USE_DSHOT_TELEMETRY) || defined(USE_ESC_SENSOR)
     if ((featureIsEnabled(FEATURE_ESC_SENSOR)) || (motorConfig()->dev.useDshotTelemetry)) {
         osdAddActiveElement(OSD_ESC_RPM);
         osdAddActiveElement(OSD_ESC_RPM_FREQ);
