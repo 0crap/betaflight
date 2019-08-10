@@ -239,7 +239,7 @@
 #endif
 #endif
 
-#if (!defined(USE_FLASHFS) || !defined(USE_RTC_TIME) || !defined(USE_USB_MSC))
+#if (!defined(USE_FLASHFS) || !defined(USE_RTC_TIME) || !defined(USE_USB_MSC) || !defined(USE_PERSISTENT_OBJECTS))
 #undef USE_PERSISTENT_MSC_RTC
 #endif
 
@@ -317,4 +317,8 @@
 // TODO: Remove this once HAL support is fixed for ESCSERIAL
 #ifdef STM32F7
 #undef USE_ESCSERIAL
+#endif
+
+#ifndef USE_ITERM_RELAX
+#undef USE_ABSOLUTE_CONTROL
 #endif

@@ -18,37 +18,25 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdint.h>
+
 #include "platform.h"
-
-#ifdef USE_RX_SPI
-
 #include "drivers/io.h"
-#include "drivers/bus_spi.h"
 
-#include "pg/pg.h"
-#include "pg/pg_ids.h"
-#include "pg/rx_spi.h"
+#include "drivers/dma.h"
+#include "drivers/timer.h"
+#include "drivers/timer_def.h"
 
-#include "rx/rx_spi.h"
+const timerHardware_t timerHardware[USABLE_TIMER_CHANNEL_COUNT] = {
 
-PG_REGISTER_WITH_RESET_FN(rxSpiConfig_t, rxSpiConfig, PG_RX_SPI_CONFIG, 0);
+    DEF_TIM(TIM11,  CH1,  PB9,  TIM_USE_PPM,   0, 0 ), // PPM IN
+    DEF_TIM(TIM2,   CH2,  PB3,  TIM_USE_MOTOR, 0, 0 ), // S1_OUT - UP1-1
+    DEF_TIM(TIM3,   CH1,  PB4,  TIM_USE_MOTOR, 0, 0 ), // S2_OUT - UP1-2
+    DEF_TIM(TIM4,   CH1,  PB6,  TIM_USE_MOTOR, 0, 0 ), // S3_OUT - UP1-2
+    DEF_TIM(TIM4,   CH2,  PB7,  TIM_USE_MOTOR, 0, 0 ), // S4_OUT - UP1-2
+    DEF_TIM(TIM2,   CH1,  PA15, TIM_USE_ANY,   0, 0 ), // S5_OUT - UP1-1
+    DEF_TIM(TIM10,  CH1,  PB8,  TIM_USE_ANY,   0, 0 ), // S6_OUT - DMA NONE
 
-void pgResetFn_rxSpiConfig(rxSpiConfig_t *rxSpiConfig)
-{
-    rxSpiConfig->rx_spi_protocol = RX_SPI_DEFAULT_PROTOCOL;
+    DEF_TIM(TIM1,   CH1,  PA8,  TIM_USE_LED,   0, 0 ), // LED_STRIP - DMA2_ST3_CH6
 
-    // Basic SPI
-    rxSpiConfig->csnTag = IO_TAG(RX_NSS_PIN);
-    rxSpiConfig->spibus = SPI_DEV_TO_CFG(spiDeviceByInstance(RX_SPI_INSTANCE));
-
-    rxSpiConfig->extiIoTag = IO_TAG(RX_SPI_EXTI_PIN);
-
-    rxSpiConfig->bindIoTag = IO_TAG(RX_SPI_BIND_PIN);
-    rxSpiConfig->ledIoTag = IO_TAG(RX_SPI_LED_PIN);
-#ifdef RX_SPI_LED_INVERTED
-    rxSpiConfig->ledInversion = true;
-#else
-    rxSpiConfig->ledInversion = false;
-#endif
-}
-#endif
+};
